@@ -88,6 +88,7 @@ async def start_handler(message: Message):
 
 @router.message(Command("src"))
 async def start_handler(message: Message, state: FSMContext):
+    if await state.get_state() == Input.url: return
     if await state.get_state() == Input.failed:
         data = await state.get_data()
         try:
