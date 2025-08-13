@@ -57,6 +57,8 @@ async def start_handler(message: Message, state: FSMContext):
         except:
             return
             
+    await state.set_state(Await.await_state)
+            
     await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     await message.answer(
         "👋 Привет! Я — бот, который пришлет тебе mp3 c ютуба\n"
