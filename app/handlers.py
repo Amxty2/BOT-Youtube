@@ -31,11 +31,13 @@ class AwaitInput(StatesGroup):
 router = Router()
 
 
-@router.message(F.text & ~F.text.startswith('/'), Await.await_state)
+
+@router.message(F.text & ~(F.text.startswith('/start') | F.text.startswith('/src')), Await.await_state)
 async def start_handler(message: Message, state: FSMContext):
     await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
 
-@router.message(F.text & ~F.text.startswith('/'), Input.failed)
+
+@router.message(F.text & ~(F.text.startswith('/start') | F.text.startswith('/src')), Input.failed)
 async def start_handler(message : Message, state: FSMContext):
     await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     await state.set_state(Await.await_state)
@@ -54,10 +56,12 @@ async def start_handler(message: Message, state: FSMContext):
             await message.bot.delete_message(chat_id=data["msg_chat_id"], message_id=data["msg_id"])
         except:
             return
+            
+    await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     await message.answer(
         "👋 Привет! Я — бот, который пришлет тебе mp3 c ютуба\n"
         "просто введи команду /src и вставь сслыку\n"
-        "длинной до 10 минут\n"
+        "длинной не более 10 минут\n"
         '"это сообщение можно удалить"'
     )
 
