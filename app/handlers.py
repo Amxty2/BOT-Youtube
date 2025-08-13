@@ -66,6 +66,7 @@ async def start_handler(message: Message, state: FSMContext):
 
 @router.message(Command("user_info"))
 async def start_handler(message: Message):
+    print(message.from_user.id)
     if message.from_user.id != ADMIN: return
     all_users = await get_users()
     if not all_users: return await message.answer("No users")
