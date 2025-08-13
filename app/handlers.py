@@ -89,7 +89,9 @@ async def start_handler(message: Message):
 
 @router.message(Command("src"))
 async def start_handler(message: Message, state: FSMContext):
-    if await state.get_state() == Input.url: return
+    if await state.get_state() == Input.url:
+        await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+        return
     if await state.get_state() == Input.failed:
         data = await state.get_data()
         try:
@@ -126,7 +128,7 @@ async def start_handler(message: Message, state: FSMContext):
     mp3_patch = []
 
     if not is_valid_youtube_video(message.text):
-        msg_failed = await message.answer("Не удалось скачать, возможно это плейлист или ссылка с браузера")
+        msg_failed = await message.answer("Не удалось скачать, возможно это плейлист или ссылка с браузера", reply_markup=kb.src)
         await state.update_data(msg_chat_id=msg_failed.chat.id, msg_id=msg_failed.message_id)
         await state.set_state(Input.failed)
         await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
