@@ -8,8 +8,8 @@ main = ReplyKeyboardMarkup(keyboard=[
 
 )
 
-search_photo = ReplyKeyboardMarkup(keyboard=[
-    [KeyboardButton(text="Поиск фото 🔎")]
+src = ReplyKeyboardMarkup(keyboard=[
+    [KeyboardButton(text="/src")]
 ],
     resize_keyboard=True
 
