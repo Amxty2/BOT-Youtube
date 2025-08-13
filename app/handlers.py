@@ -64,7 +64,8 @@ async def start_handler(message: Message, state: FSMContext):
         "👋 Привет! Я — бот, который пришлет тебе mp3 c ютуба\n"
         "просто введи команду /src и вставь сслыку\n"
         "длинной не более 10 минут\n"
-        '"это сообщение можно удалить"'
+        '"это сообщение можно удалить"',
+        reply_markup=kb.src
     )
 
     await set_user(message)
@@ -98,7 +99,7 @@ async def start_handler(message: Message, state: FSMContext):
 
 
     await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
-    msg = await message.bot.send_message(chat_id=message.chat.id, text="Вставьте ссылку")
+    msg = await message.bot.send_message(chat_id=message.chat.id, text="Вставьте ссылку", reply_markup=ReplyKeyboardRemove())
     await state.update_data(msg_chat_id=msg.chat.id, msg_id=msg.message_id)
     await state.set_state(Input.url)
 
@@ -142,11 +143,11 @@ async def start_handler(message: Message, state: FSMContext):
             await state.set_state(Input.failed)
 
         else:
-            await message.bot.send_audio(chat_id=message.chat.id, audio=mp3_patch[0])
+            await message.bot.send_audio(chat_id=message.chat.id, audio=mp3_patch[0], reply_markup=kb.src)
             await state.set_state(Await.await_state)
     except Exception as e:
         print(e)
-        msg_failed = await message.answer("Не удалось скачать")
+        msg_failed = await message.answer("Не удалось скачать", reply_markup=kb.src)
         await state.update_data(msg_chat_id=msg_failed.chat.id, msg_id=msg_failed.message_id)
         await state.set_state(Input.failed)
 
